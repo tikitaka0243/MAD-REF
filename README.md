@@ -10,9 +10,13 @@
 
 </div>
 
+<div align="center">
 
-# Local and global dynamic marine variable fields inversion with primitive equations neural networks (PENN)
+**Local and global dynamic marine variable fields inversion**
 
+**with primitive equations neural networks (PENN)**
+
+</div>
 
 
 ![](/Plot/ResultEquator.jpg)
