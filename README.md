@@ -1,3 +1,6 @@
+<span style="color: grey;">It is better to read in light mode.</span>
+
+
 # PENN
 
 **Local and global dynamic marine variable fields inversion with primitive equations neural networks (PENN)**
