@@ -3,7 +3,7 @@
 **Local and global dynamic marine variable fields inversion with primitive equations neural networks (PENN)**
 
 
-![](/Plot/Fig1.jpg)
+![](/Plot/ResultEquator.jpg)
 
 
 
@@ -25,4 +25,7 @@ We found that a convenient way to download Argo data is to use Argo's data visua
 <!-- Once the download is finished, you can run the file LoadData.py in the data folder. -->
 
 # Primitive equations neural networks (PENN)
+
+![](/Plot/PENNStructure.jpg)
+
 
