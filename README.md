@@ -41,3 +41,8 @@ We found that a convenient way to download Argo data is to use Argo's data visua
 ![](/Plot/PENNStructure.jpg)
 
 
+# R Shiny platform
+
+We have integrated all the variable prediction performances across different time and space into an interactive R Shiny platform (https://tikitakatikitaka.shinyapps.io/penn-shiny/). This platform facilitates users to access information about marine variables of interest across different time and spatial dimensions.
+
+<img src="Plot/Shiny.png" alt="图像" width="400"/>
