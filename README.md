@@ -1,6 +1,11 @@
 <!-- <span style="color: grey;">_It is better to read in light appearance._</span> -->
 
-<span style="font-size:12px;">_It is better to read in light appearance._</span>
+<div align="right">
+<span style="font-size: 12px; font-style: italic; opacity: 0.5;">
+  It is better to read in light appearance.
+</span>
+</div>
+
 
 # PENN
 
