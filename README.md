@@ -1,4 +1,4 @@
-<span style="color: grey;">It is better to read in light mode.</span>
+<span style="color: grey;">_It is better to read in light mode._</span>
 
 
 # PENN
