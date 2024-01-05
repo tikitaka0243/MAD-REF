@@ -1,5 +1,6 @@
-<span style="color: grey;">_It is better to read in light mode._</span>
+<!-- <span style="color: grey;">_It is better to read in light appearance._</span> -->
 
+<span style="font-size:12px;">_It is better to read in light appearance._</span>
 
 # PENN
 
