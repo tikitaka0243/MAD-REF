@@ -3,6 +3,9 @@
 **Local and global dynamic marine variable fields inversion with primitive equations neural networks (PENN)**
 
 
+![](/Plot/Fig1.jpg)
+
+
 
 ## Abstract
 
@@ -20,3 +23,6 @@ We utilized ocean temperature and salinity data from the Argo project (https://a
 We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the csv format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant nc data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the code 'cur' and 'wcur' in it represent the 3D ocean current reanalysis data. You can download the global ocean-wide data for the whole year of 2021 to 2022, and our code will process them.
 
 <!-- Once the download is finished, you can run the file LoadData.py in the data folder. -->
+
+# Primitive equations neural networks (PENN)
+
