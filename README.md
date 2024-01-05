@@ -1,4 +1,4 @@
-# Primitive Equations Neural Networks
+# PENN
 
 **Primitive Equations Neural Networks**
 
