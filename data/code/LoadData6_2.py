@@ -6,7 +6,7 @@ from tqdm import tqdm
 import netCDF4 as nc
 
 import sys
-sys.path.append('/public/home/tianting/PINN_equator/')
+sys.path.append()
 from ocean_mask import is_ocean_3d_fast, get_ocean_depth_fast
 from Functions import move_phi
 
@@ -22,7 +22,7 @@ for model in range(1, 2):
         mesh_pre.loc[mesh_pre['phi'] <= -20 / 180 * np.pi, 'phi'] += 200 / 180 * np.pi
         mesh_pre.loc[mesh_pre['phi'] > -20 / 180 * np.pi, 'phi'] -= 160 / 180 * np.pi
 
-    dataset = nc.Dataset('/public/home/tianting/PINN_equator/GLO-MFC_001_024_mask_bathy.nc')
+    dataset = nc.Dataset('GLO-MFC_001_024_mask_bathy.nc')
     all_vars = dataset.variables.keys()
     latitude = dataset.variables['latitude'][:]
     longitude = dataset.variables['longitude'][:]

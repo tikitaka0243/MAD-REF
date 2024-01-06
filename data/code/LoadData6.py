@@ -6,7 +6,7 @@ from tqdm import tqdm
 import netCDF4 as nc
 
 import sys
-sys.path.append('/public/home/tianting/PINN_equator/')
+sys.path.append()
 from ocean_mask import is_ocean_3d_fast, get_ocean_depth
 from Functions import move_phi
 
@@ -88,7 +88,7 @@ for i in tqdm(range(1)):
         'phi': phi.ravel()
     })
 
-    dataset = nc.Dataset('/public/home/tianting/PINN_equator/GLO-MFC_001_024_mask_bathy.nc')
+    dataset = nc.Dataset('GLO-MFC_001_024_mask_bathy.nc')
     all_vars = dataset.variables.keys()
 
     latitude = dataset.variables['latitude'][:]

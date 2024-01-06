@@ -4,7 +4,7 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 
 import sys
-sys.path.append('/public/home/tianting/PINN_equator/')
+sys.path.append()
 import Functions
 
 
@@ -18,7 +18,7 @@ pd.options.display.max_columns = 40
 
 # ----------- Normalization --------------
 
-data_path = '/public/home/tianting/PINN_equator/Data/Equator_all/'
+# data_path = 
 WW = False
 
 # Argo

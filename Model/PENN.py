@@ -13,7 +13,7 @@ import time
 from tqdm import tqdm
 
 import sys
-sys.path.append('/public/home/tianting/PINN_equator/')
+sys.path.append('')
 import Functions
 import PEs
 
@@ -24,7 +24,7 @@ print("Time:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 pd.set_option('display.width', 1000)
 pd.options.display.max_columns = 40
 
-data_path = '/public/home/tianting/PINN_equator/Data/Equator_all/'
+data_path = 
 
 
 def data_argo_train():
