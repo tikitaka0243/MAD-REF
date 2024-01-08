@@ -123,7 +123,7 @@ def currents_convert_and_filter(data_path, save_path, min_r, max_r, min_theta, m
                 result = np.asarray(result)
                 np.save(save_path_t, result)
 
-
+ 
 def argo_split(data_path, save_path, ratio=[8, 1, 1]):
 
     print('Spliting Argo data.')
