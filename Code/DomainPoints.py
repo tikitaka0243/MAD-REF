@@ -12,7 +12,7 @@ from OceanMask import is_ocean_3d_fast
 
 # -------------- Generate domian points ---------------
 
-def generate_domain_points(r_min, r_max, theta_min, theta_max, phi_min, phi_max, r_num, theta_num, phi_num, save_path):
+def generate_domain_points(save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, r_num, theta_num, phi_num):
     r_range = np.linspace(r_min, r_max, r_num, endpoint=True)
     theta_range = np.linspace(theta_min, theta_max, theta_num, endpoint=True)
     phi_range = np.linspace(phi_min, phi_max, phi_num, endpoint=True)

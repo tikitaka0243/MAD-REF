@@ -48,7 +48,7 @@ def data_wcur_validate(data_path):
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
 
 
-def penn_training_and_validation(data_path, domain_points_path, batch_size, init_beta_tau, init_beta_sigma, num_domain, num_boundary, input_output_size, n_layers, activation, initializer, model_save_path_1, model_save_path_2, variable_save_path, save_period, resample_period_1, resample_period_2, num_iter_1, num_iter_2, optimizer, learning_rate_1, learning_rate_2, loss_weights_1, loss_weights_2):
+def penn_training(data_path, domain_points_path, batch_size, init_beta_tau, init_beta_sigma, num_domain, num_boundary, input_output_size, n_layers, activation, initializer, model_save_path_1, model_save_path_2, variable_save_path, save_period, resample_period_1, resample_period_2, num_iter_1, num_iter_2, optimizer, learning_rate_1, learning_rate_2, loss_weights_1, loss_weights_2):
 
     start_time = time.time()
     print("Time:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
