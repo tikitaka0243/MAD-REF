@@ -1,3 +1,7 @@
+import deepxde as dde
+import torch
+
+
 def primitive_equations(x, y):
 
     z = x[:, 0:1]
