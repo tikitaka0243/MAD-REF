@@ -36,13 +36,19 @@ We found that a convenient way to download Argo data is to use Argo's data visua
 
 After downloading the data, run the following function in the `Code/LoadData.py` file to process them.
 
-```
+```python
 load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t, trian_vali_test=[8, 1, 1], ratio=1)
 ```
 
 # Primitive equations neural networks (PENN)
 
 ![](/Plot/PENNStructure.jpg)
+
+Above is the structure of PENN, run the following function to train the model.
+
+```python
+penn(data_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, r_num, theta_num, phi_num, batch_size, init_beta_tau, init_beta_sigma, num_domain, num_boundary, input_output_size, n_layers, activation, initializer, model_save_path_1, model_save_path_2, variable_save_path, save_period, resample_period_1, resample_period_2, num_iter_1, num_iter_2, optimizer, learning_rate_1, learning_rate_2, loss_weights_1, loss_weights_2)
+```
 
 
 # R Shiny platform
