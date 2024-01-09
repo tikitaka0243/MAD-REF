@@ -1,4 +1,4 @@
-def Primitive_Equations(x, y):
+def primitive_equations(x, y):
 
     z = x[:, 0:1]
     theta = x[:, 1:2]

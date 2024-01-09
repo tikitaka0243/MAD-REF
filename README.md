@@ -32,9 +32,13 @@ Ocean global dynamics, Fields inversion, Primitive equations, Unobserved marine 
 
 We utilized ocean temperature and salinity data from the Argo project (https://argo.ucsd.edu/) and current reanalysis data from the EU Copernicus ocean service (https://www.copernicus.eu/en).
 
-We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the csv format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant nc data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the code 'cur' and 'wcur' in it represent the 3D ocean current reanalysis data. You can download the global ocean-wide data for the whole year of 2021 to 2022, and our code will process them.
+We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the csv format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant nc data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the code 'cur' and 'wcur' in it represent the 3D ocean current reanalysis data.
 
-<!-- Once the download is finished, you can run the file LoadData.py in the data folder. -->
+After downloading the data, run the following function in the `Code/LoadData.py` file to process them.
+
+```
+load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t, trian_vali_test=[8, 1, 1], ratio=1)
+```
 
 # Primitive equations neural networks (PENN)
 
