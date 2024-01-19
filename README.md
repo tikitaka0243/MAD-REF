@@ -37,7 +37,7 @@ We found that a convenient way to download Argo data is to use Argo's data visua
 After downloading the data, run the following function in the `Code/LoadData.py` file to process them.
 
 ```python
-load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t, trian_vali_test=[8, 1, 1], ratio=1)
+load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, trian_vali_test=[8, 1, 1], ratio=1)
 ```
 
 # Primitive equations neural networks (PENN)
@@ -47,7 +47,7 @@ load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path
 Above is the structure of PENN, run the following function to train the model.
 
 ```python
-penn(data_path, min_r, max_r, ...)
+penn(data_path, r_min, r_max, ...)
 ```
 
 

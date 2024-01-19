@@ -11,20 +11,20 @@ pd.set_option('display.width', 1000)
 pd.options.display.max_columns = 40
 
 
-def data_filter_and_standardization(data, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t):
+def data_filter_and_standardization(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
 
-    min_t = pd.to_datetime(min_t).value / 10 ** 9
-    max_t = pd.to_datetime(max_t).value / 10 ** 9
+    t_min = pd.to_datetime(t_min).value / 10 ** 9
+    t_max = pd.to_datetime(t_max).value / 10 ** 9
 
-    data = data[(data[:, 0] >= min_r) & (data[:, 0] <= max_r) &
-                (data[:, 1] >= min_theta) & (data[:, 1] <= max_theta) &
-                (data[:, 2] >= min_phi) & (data[:, 2] <= max_phi) &
-                (data[:, 3] >= min_t) & (data[:, 3] <= max_t)]
+    data = data[(data[:, 0] >= r_min) & (data[:, 0] <= r_max) &
+                (data[:, 1] >= theta_min) & (data[:, 1] <= theta_max) &
+                (data[:, 2] >= phi_min) & (data[:, 2] <= phi_max) &
+                (data[:, 3] >= t_min) & (data[:, 3] <= t_max)]
 
-    # data[:, 0] = (data[:, 0] - min_r) / (max_r - min_r)
-    # data[:, 1] = (data[:, 1] - min_theta) / (max_theta - min_theta)
-    # data[:, 2] = (data[:, 2] - min_phi) / (max_phi - min_phi)
-    # data[:, 3] = (data[:, 3] - min_t) / (max_t - min_t)
+    # data[:, 0] = (data[:, 0] - r_min) / (r_max - r_min)
+    # data[:, 1] = (data[:, 1] - theta_min) / (theta_max - theta_min)
+    # data[:, 2] = (data[:, 2] - phi_min) / (phi_max - phi_min)
+    # data[:, 3] = (data[:, 3] - t_min) / (t_max - t_min)
 
     return data
 
@@ -44,7 +44,7 @@ def argo_concat(data_path, save_path):
     # print(data.head(20))
 
 
-def argo_filter(data_path, save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t):
+def argo_filter(data_path, save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
     print('Filtering the Argo data.')
 
     raw_argo_data = pd.read_csv(data_path)
@@ -59,13 +59,13 @@ def argo_filter(data_path, save_path, min_r, max_r, min_theta, max_theta, min_ph
 
     argo_all = argo_all.to_numpy()
 
-    argo_all = data_filter_and_standardization(argo_all, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t)
+    argo_all = data_filter_and_standardization(argo_all, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
     # print(pd.DataFrame(argo_all), '\n', pd.DataFrame(argo_all).describe())
 
     np.save(save_path, argo_all)
 
 
-def currents_convert_and_filter(data_path, save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t):
+def currents_convert_and_filter(data_path, save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
 
     print('Coverting the Copernicus NC files and filtering the currents data.')
 
@@ -116,7 +116,7 @@ def currents_convert_and_filter(data_path, save_path, min_r, max_r, min_theta, m
                 result[:, 0] *= -1
                 result[:, 3] = result[:, 3] * 3600 - seconds_1950_to_1970 # Seconds from 1st Jan 1970
 
-                result = data_filter_and_standardization(result, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t)
+                result = data_filter_and_standardization(result, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
                 # print(pd.DataFrame(result), '\n', pd.DataFrame(result).describe())
 
                 result = result.data
@@ -182,7 +182,7 @@ def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ra
         np.save(os.path.join(save_path, f"{i}_test.npy"), merged_part3)
 
 
-def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, min_r, max_r, min_theta, max_theta, min_phi, max_phi, min_t, max_t, trian_vali_test=[8, 1, 1], ratio=1):
+def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, trian_vali_test=[8, 1, 1], ratio=1):
 
     print('#' * 15, 'Data loading', '#' * 15)
 
@@ -195,10 +195,10 @@ def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_
     # Select relevant variables, filter the data and standardize them
     argo_filter(data_path=f'{argo_save_path}/raw_argo_data.csv', 
                 save_path=f'{argo_save_path}/argo_data_filtered.npy', 
-                min_r=min_r, max_r=max_r, 
-                min_theta=min_theta, max_theta=max_theta, 
-                min_phi=min_phi, max_phi=max_phi, 
-                min_t=min_t, max_t=max_t)
+                r_min=r_min, r_max=r_max, 
+                theta_min=theta_min, theta_max=theta_max, 
+                phi_min=phi_min, phi_max=phi_max, 
+                t_min=t_min, t_max=t_max)
 
     # Split data into training, validation and test sets.
     argo_split(data_path=f'{argo_save_path}/argo_data_filtered.npy', 
@@ -211,10 +211,10 @@ def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_
     # Convert NC files, filter the data and standardize them
     currents_convert_and_filter(data_path=currents_data_path, 
                                 save_path=currents_data_path, 
-                                min_r=min_r, max_r=max_r, 
-                                min_theta=min_theta, max_theta=max_theta, 
-                                min_phi=min_phi, max_phi=max_phi, 
-                                min_t=min_t, max_t=max_t)
+                                r_min=r_min, r_max=r_max, 
+                                theta_min=theta_min, theta_max=theta_max, 
+                                phi_min=phi_min, phi_max=phi_max, 
+                                t_min=t_min, t_max=t_max)
 
     # Merge data fron different files and split them into training, validation and test sets.
     currents_merge_and_split(data_path=currents_data_path,

@@ -270,8 +270,8 @@ def penn_training(data_path, domain_points_path, batch_size, init_beta_tau, init
     loss_va = pd.read_csv('loss_va.csv')
     var_names = ['temp', 'sal', 'w', 'v_theta', 'v_phi']
     for var in range(5):
-        min_row_index = np.argmin(loss_va.iloc[:, (var + 1)])
-        best_model = round(loss_va.iloc[min_row_index, 0])
+        r_minow_index = np.argmin(loss_va.iloc[:, (var + 1)])
+        best_model = round(loss_va.iloc[r_minow_index, 0])
         model.compile("adam", lr= 1 / (10 ** 5))
         print('Best model (' + var_names[var] + '):', best_model)
         model.restore(f'{model_save_path}/model-' + str(best_model) + '.pt', verbose=0)
