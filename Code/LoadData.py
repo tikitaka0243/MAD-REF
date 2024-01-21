@@ -161,10 +161,13 @@ def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ra
                 
                 # Split into three parts
                 n = round(df.shape[0] * ratio)
-                sample = np.random.choice(n, size=n, replace=False)
-                part1 = df[sample[:round(n / sum(trian_vali_test) * trian_vali_test[0])]]
-                part2 = df[sample[round(n / sum(trian_vali_test) * trian_vali_test[0]):round(n / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1]))]]
-                part3 = df[sample[round(n / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1])):]]
+                b_1 = round(n / sum(trian_vali_test) * trian_vali_test[0])
+                b_2 = round(n / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1]))
+
+                sample = np.random.choice(df.shape[0], size=df.shape[0], replace=False)
+                part1 = df[sample[:b_1]]
+                part2 = df[sample[b_1:b_2]]
+                part3 = df[sample[b_2:n]]
                 
                 # Append the three parts to the respective lists
                 all_part1.append(part1)

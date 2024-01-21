@@ -1,9 +1,7 @@
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-
-import sys
-sys.path.append()
+import os
 
 
 pd.set_option('display.width', 1000)
@@ -13,68 +11,77 @@ pd.options.display.max_columns = 40
 
 # ----------- Normalization --------------
 
+def coordinates_normalization(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
+    data_scale = np.copy(data)
+    data_scale[:, 0] = (data[:, 0] - r_min) / (r_max - r_min)
+    data_scale[:, 1] = (data[:, 1] - theta_min) / (theta_max - theta_min)
+    data_scale[:, 2] = (data[:, 2] - phi_min) / (phi_max - phi_min)
 
-def data_normalization(data_path):
+    t_min = pd.to_datetime(t_min).value / 10 ** 9
+    t_max = pd.to_datetime(t_max).value / 10 ** 9
+    data_scale[:, 3] = (data[:, 3] - t_min) / (t_max - t_min)
+
+    return data_scale
+
+
+def data_normalization(data_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
+
+    print('Normalizing data.')
+
+    data_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', data_path))
 
     # ------------- Argo ---------------
 
     # Argo
-    argo_train = np.load(data_path + 'Argo/argo_train.npy')
+    argo_train = np.load(os.path.join(data_path, 'Argo/argo_train.npy'))
 
-    # r
-    argo_train_scale = np.copy(argo_train)
-    argo_train_scale[:, 0] = (argo_train[:, 0] + 2000) / 2000
+    # Coordinates
+    argo_train_scale = coordinates_normalization(argo_train, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
 
     # temp and sal
     for j in [4, 5]:
         argo_train_scale[:, j] = (argo_train[:, j] - np.mean(argo_train[:, j])) / np.std(argo_train[:, j])
 
-    np.save(data_path + 'Argo/argo_train_scale.npy', argo_train_scale)
+    np.save(os.path.join(data_path, 'Argo/argo_train_scale.npy'), argo_train_scale)
 
     for df_name in ['vali', 'test']:
-        df_argo = np.load(data_path + 'Argo/argo_' + df_name + '.npy')
-        df_argo_scale = np.copy(df_argo)
-        df_argo_scale[:, 0] = (df_argo_scale[:, 0] + 2000) / 2000
+        df_argo = np.load(os.path.join(data_path, 'Argo/argo_' + df_name + '.npy'))
 
-        np.save(data_path + 'Argo/argo_' + df_name + '_scale.npy', df_argo_scale)
+        df_argo_scale = coordinates_normalization(df_argo, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
+
+        np.save(os.path.join(data_path, 'Argo/argo_' + df_name + '_scale.npy'), df_argo_scale)
 
 
     # ---------------- Currents ---------------
 
-    cur_train = np.load(data_path + 'Currents/cur_train.npy')
-    wcur_train = np.load(data_path + 'Currents/wcur_train.npy')
+    cur_train = np.load(os.path.join(data_path, 'Currents/cur_train.npy'))
+    wcur_train = np.load(os.path.join(data_path, 'Currents/wcur_train.npy'))
 
-    cur_train_scale = np.copy(cur_train)
-    wcur_train_scale = np.copy(wcur_train)
+    # Coordinates
+    cur_train_scale = coordinates_normalization(cur_train, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
+    wcur_train_scale = coordinates_normalization(wcur_train, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
+
     # uo: eastward velocity
     # vo: northward velocity
     # wo: vertical velocity
 
-    cur_train_scale[:, 0] = (-cur_train[:, 0] + 2000) / 2000
-    wcur_train_scale[:, 0] = (-wcur_train[:, 0] + 2000) / 2000
-
-    for j in [1, 2]:
-        cur_train_scale[:, j] = cur_train[:, j] / 180 * np.pi
-        wcur_train_scale[:, j] = wcur_train[:, j] / 180 * np.pi
-
+    # v_theta, v_phi
     for j in [4, 5]:
         cur_train_scale[:, j] = (cur_train[:, j] - np.mean(cur_train[:, j])) / np.std(cur_train[:, j])
+
+    # w
     wcur_train_scale[:, 4] = (wcur_train[:, 4] - np.mean(wcur_train[:, 4])) / np.std(wcur_train[:, 4])
 
-    np.save(data_path + 'Currents/cur_train_scale.npy', cur_train_scale)
-    np.save(data_path + 'Currents/wcur_train_scale.npy', wcur_train_scale)
+    np.save(os.path.join(data_path, 'Currents/cur_train_scale.npy'), cur_train_scale)
+    np.save(os.path.join(data_path, 'Currents/wcur_train_scale.npy'), wcur_train_scale)
 
 
-    for df_name in tqdm(['cur_test', 'cur_vali', 'wcur_test', 'wcur_vali']):
-        df_currents = np.load(data_path + 'Currents/' + df_name + '.npy')
+    for df_name in ['cur_test', 'cur_vali', 'wcur_test', 'wcur_vali']:
+        df_currents = np.load(os.path.join(data_path, 'Currents/' + df_name + '.npy'))
 
-        df_currents_scale = np.copy(df_currents)
+        df_currents_scale = coordinates_normalization(df_currents, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
         
-        df_currents_scale[:, 0] = (-df_currents[:, 0] + 2000) / 2000
-        for j in [1, 2]:
-            df_currents_scale[:, j] = df_currents[:, j] / 180 * np.pi
-        
-        np.save(data_path + 'Currents/' + df_name + '_scale.npy', df_currents_scale)
+        np.save(os.path.join(data_path, 'Currents/' + df_name + '_scale.npy'), df_currents_scale)
 
 
     # Mean and Standard Deviation
@@ -86,4 +93,4 @@ def data_normalization(data_path):
     index = ['mean', 'std']
 
     train_mean_std = pd.DataFrame(data=train_mean_std, columns=columns, index=index)
-    train_mean_std.to_csv(data_path + 'train_mean_std.csv')
+    train_mean_std.to_csv(os.path.join(data_path, 'train_mean_std.csv'))

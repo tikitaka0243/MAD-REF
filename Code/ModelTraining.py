@@ -8,9 +8,6 @@ import shutil, os
 import time
 from tqdm import tqdm
 
-# import sys
-# sys.path.append('')
-import Functions
 from PrimitiveEquations import primitive_equations
 
 
