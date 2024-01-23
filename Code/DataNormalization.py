@@ -11,15 +11,16 @@ pd.options.display.max_columns = 40
 
 # ----------- Normalization --------------
 
-def coordinates_normalization(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
+def coordinates_normalization(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min=None, t_max=None):
     data_scale = np.copy(data)
     data_scale[:, 0] = (data[:, 0] - r_min) / (r_max - r_min)
     data_scale[:, 1] = (data[:, 1] - theta_min) / (theta_max - theta_min)
     data_scale[:, 2] = (data[:, 2] - phi_min) / (phi_max - phi_min)
 
-    t_min = pd.to_datetime(t_min).value / 10 ** 9
-    t_max = pd.to_datetime(t_max).value / 10 ** 9
-    data_scale[:, 3] = (data[:, 3] - t_min) / (t_max - t_min)
+    if (t_min is not None) and (t_max is not None):
+        t_min = pd.to_datetime(t_min).value / 10 ** 9
+        t_max = pd.to_datetime(t_max).value / 10 ** 9
+        data_scale[:, 3] = (data[:, 3] - t_min) / (t_max - t_min)
 
     return data_scale
 

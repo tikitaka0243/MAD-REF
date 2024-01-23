@@ -12,36 +12,36 @@ from PrimitiveEquations import primitive_equations
 
 
 def data_argo_train(data_path):
-    data = np.load(data_path + 'Argo/argo_train_scale.npy')
+    data = np.load(os.path.join(data_path, 'Argo/argo_train_scale.npy'))
     zero_rows = np.nonzero((data == 0).all(axis=1))
     data = np.delete(data, zero_rows, axis=0)
     # print('argo_train:\n', data.describe())
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4], data[:, 5]
 
 def data_argo_validate(data_path):
-    data = np.load(data_path + 'Argo/argo_vali_scale.npy')
+    data = np.load(os.path.join(data_path, 'Argo/argo_vali_scale.npy'))
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4], data[:, 5]
 
 def data_cur_train(data_path):
-    data = np.load(data_path + 'Currents/cur_train_scale.npy')
+    data = np.load(os.path.join(data_path, 'Currents/cur_train_scale.npy'))
     zero_rows = np.nonzero((data == 0).all(axis=1))
     data = np.delete(data, zero_rows, axis=0)
     # print('cur_train:\n', data.describe())
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4], data[:, 5]
 
 def data_cur_validate(data_path):
-    data = np.load(data_path + 'Currents/cur_vali_scale.npy')
+    data = np.load(os.path.join(data_path, 'Currents/cur_vali_scale.npy'))
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4], data[:, 5]
 
 def data_wcur_train(data_path):
-    data = np.load(data_path + 'Currents/wcur_train_scale.npy')
+    data = np.load(os.path.join(data_path, 'Currents/wcur_train_scale.npy'))
     zero_rows = np.nonzero((data == 0).all(axis=1))
     data = np.delete(data, zero_rows, axis=0)
     # print('wcur_train:\n', data.describe())
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
 
 def data_wcur_validate(data_path):
-    data = np.load(data_path + 'Currents/wcur_vali_scale.npy')
+    data = np.load(os.path.join(data_path, 'Currents/wcur_vali_scale.npy'))
     return data[:, 0], data[:, 1], data[:, 2], data[:, 3], data[:, 4]
 
 
@@ -56,47 +56,54 @@ def penn_training(data_path, domain_points_path, batch_size, init_beta_tau, init
     # ------------------------ Get the Data -------------------------
 
     # training data
-    [ob_r_argo, ob_theta_argo, ob_phi_argo, ob_t_argo, ob_temp, ob_sal] = data_argo_train()
-    ob_temp = np.reshape(ob_temp.to_numpy(), (-1, 1))
-    ob_sal = np.reshape(ob_sal.to_numpy(), (-1, 1))
+    [ob_r_argo, ob_theta_argo, ob_phi_argo, ob_t_argo, ob_temp, ob_sal] = data_argo_train(data_path)
+    # ob_temp = np.reshape(ob_temp.to_numpy(), (-1, 1))
+    # ob_sal = np.reshape(ob_sal.to_numpy(), (-1, 1))
+    ob_temp = ob_temp.reshape(-1, 1)
+    ob_sal = ob_sal.reshape(-1, 1)
+    # print(type(ob_temp))
     ob_coordinate_t_argo = np.column_stack((ob_r_argo, ob_theta_argo, ob_phi_argo, ob_t_argo))
     ob_temp_sal = np.column_stack((ob_temp, ob_sal))
-    bs_argo = batch_size
+    bs_argo = 512
     observe_temp = dde.icbc.PointSetBC(ob_coordinate_t_argo, ob_temp, component=0, batch_size=bs_argo, shuffle=True)
     observe_sal = dde.icbc.PointSetBC(ob_coordinate_t_argo, ob_sal, component=1, batch_size=bs_argo, shuffle=True)
 
-    [ob_r_wcur, ob_theta_wcur, ob_phi_wcur, ob_t_wcur, ob_w] = data_wcur_train()
-    ob_w = np.reshape(ob_w.to_numpy(), (-1, 1))
+    [ob_r_wcur, ob_theta_wcur, ob_phi_wcur, ob_t_wcur, ob_w] = data_wcur_train(data_path)
+    # ob_w = np.reshape(ob_w.to_numpy(), (-1, 1))
+    ob_w = ob_w.reshape(-1, 1)
     ob_coordinate_t_wcur = np.column_stack((ob_r_wcur, ob_theta_wcur, ob_phi_wcur, ob_t_wcur))
-    bs_wcur = batch_size
+    bs_wcur = 512
     observe_w = dde.icbc.PointSetBC(ob_coordinate_t_wcur, ob_w, component=2, batch_size=bs_wcur, shuffle=True)
 
-    [ob_r_cur, ob_theta_cur, ob_phi_cur, ob_t_cur, ob_v1, ob_v2] = data_cur_train()
-    ob_v1 = np.reshape(ob_v1.to_numpy(), (-1, 1))
-    ob_v2 = np.reshape(ob_v2.to_numpy(), (-1, 1))
+    [ob_r_cur, ob_theta_cur, ob_phi_cur, ob_t_cur, ob_v1, ob_v2] = data_cur_train(data_path)
+    # ob_v1 = np.reshape(ob_v1.to_numpy(), (-1, 1))
+    # ob_v2 = np.reshape(ob_v2.to_numpy(), (-1, 1))
+    ob_v1 = ob_v1.reshape(-1, 1)
+    ob_v2 = ob_v2.reshape(-1, 1)
     ob_coordinate_t_cur = np.column_stack((ob_r_cur, ob_theta_cur, ob_phi_cur, ob_t_cur))
     ob_v1_v2 = np.column_stack((ob_v1, ob_v2))
-    bs_cur = batch_size
+    bs_cur = 512
     observe_v1 = dde.icbc.PointSetBC(ob_coordinate_t_cur, ob_v1, component=3, batch_size=bs_cur, shuffle=True)
     observe_v2 = dde.icbc.PointSetBC(ob_coordinate_t_cur, ob_v2, component=4, batch_size=bs_cur, shuffle=True)
 
 
     # Get the validation data
-    [ob_r_va, ob_theta_va, ob_phi_va, ob_t_va, ob_temp_va, ob_sal_va] = data_argo_validate()
+    [ob_r_va, ob_theta_va, ob_phi_va, ob_t_va, ob_temp_va, ob_sal_va] = data_argo_validate(data_path)
     ob_coordinate_t_argo_va = np.column_stack((ob_r_va, ob_theta_va, ob_phi_va, ob_t_va))
     ob_temp_sal_va = np.column_stack((ob_temp_va, ob_sal_va))
 
-    [ob_r_wcur_va, ob_theta_wcur_va, ob_phi_wcur_va, ob_t_wcur_va, ob_w_va] = data_wcur_validate()
-    ob_w_va = np.reshape(ob_w_va.to_numpy(), (-1, 1))
+    [ob_r_wcur_va, ob_theta_wcur_va, ob_phi_wcur_va, ob_t_wcur_va, ob_w_va] = data_wcur_validate(data_path)
+    # ob_w_va = np.reshape(ob_w_va.to_numpy(), (-1, 1))
+    ob_w_va = ob_w_va.reshape(-1, 1)
     ob_coordinate_t_wcur_va = np.column_stack((ob_r_wcur_va, ob_theta_wcur_va, ob_phi_wcur_va, ob_t_wcur_va))
 
-    [ob_r_cur_va, ob_theta_cur_va, ob_phi_cur_va, ob_t_cur_va, ob_v1_va, ob_v2_va] = data_cur_validate()
+    [ob_r_cur_va, ob_theta_cur_va, ob_phi_cur_va, ob_t_cur_va, ob_v1_va, ob_v2_va] = data_cur_validate(data_path)
     ob_coordinate_t_cur_va = np.column_stack((ob_r_cur_va, ob_theta_cur_va, ob_phi_cur_va, ob_t_cur_va))
     ob_v1_v2_va = np.column_stack((ob_v1_va, ob_v2_va))
 
 
     # ---------------------- Spatial domain: pointcloud ---------------------------
-    domain_points = np.load(os.path.join(domain_points_path, 'mesh_pre.npy'))
+    domain_points = np.load(os.path.join(domain_points_path, 'domain_points.npy'))
     zero_rows = np.nonzero((domain_points == 0).all(axis=1))
     domain_points = np.delete(domain_points, zero_rows, axis=0)
     boundary_points = domain_points[domain_points[:, 1] == 1]
@@ -138,7 +145,7 @@ def penn_training(data_path, domain_points_path, batch_size, init_beta_tau, init
 
 
     # Neural Network setup
-    net = dde.nn.FNN(layer_sizes=input_output_size, activation=activation, kernel_initializer=initializer, n_layers=n_layers)
+    net = dde.nn.FNN(layer_sizes=input_output_size, activation=activation, kernel_initializer=initializer)
     model = dde.Model(data_, net)
 
 
