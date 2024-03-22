@@ -11,7 +11,7 @@ pd.set_option('display.width', 1000)
 pd.options.display.max_columns = 40
 
 
-def data_filter_and_standardization(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
+def data_filter(data, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
 
     t_min = pd.to_datetime(t_min).value / 10 ** 9
     t_max = pd.to_datetime(t_max).value / 10 ** 9
@@ -59,15 +59,13 @@ def argo_filter(data_path, save_path, r_min, r_max, theta_min, theta_max, phi_mi
 
     argo_all = argo_all.to_numpy()
 
-    argo_all = data_filter_and_standardization(argo_all, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
+    argo_all = data_filter(argo_all, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
     # print(pd.DataFrame(argo_all), '\n', pd.DataFrame(argo_all).describe())
 
     np.save(save_path, argo_all)
 
 
-def currents_convert_and_filter(data_path, save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max):
-
-    print('Coverting the Copernicus NC files and filtering the currents data.')
+def nc_convert_and_filter(nc_path, npy_save_path, r_min=None, r_max=None, theta_min=None, theta_max=None, phi_min=None, phi_max=None, t_min=None, t_max=None):
 
     start_date = datetime.datetime(1950, 1, 1, 0, 0)
     end_date = datetime.datetime(1970, 1, 1, 0, 0)
@@ -75,53 +73,59 @@ def currents_convert_and_filter(data_path, save_path, r_min, r_max, theta_min, t
     seconds_1950_to_1970 = time_difference.total_seconds()
 
 
-    for i in [['cur', 'wcur'][1]]:
-        data_dir = f'{data_path}/{i}'
-        save_dir = f'{save_path}/{i}'
+    dataset = nc.Dataset(nc_path)
+    all_vars = list(dataset.variables.keys())
 
-        for file in tqdm(os.listdir(data_dir)):
-            if file.endswith('.nc'):
-                nc_path = os.path.join(data_dir, file)
-                save_path_t = os.path.join(save_dir, file[:-3] + '.npy')
+    # vo: northward velocity (v_theta)
+    # uo: eastward velocity (v_phi)
+    # wo: vertical velocity
 
-                dataset = nc.Dataset(nc_path)
-                # all_vars = dataset.variables.keys()
-                # print(dataset.variables)
+    depth = dataset.variables['depth'][:]
+    latitude = dataset.variables['latitude'][:]
+    longitude = dataset.variables['longitude'][:]
+    time = dataset.variables['time'][:]
 
-                # vo: northward velocity (v_theta)
-                # uo: eastward velocity (v_phi)
-                # wo: vertical velocity
+    if len(all_vars) == 6:
+        var_1 = dataset.variables[all_vars[4]][:]
+        var_2 = dataset.variables[all_vars[5]][:]
+        indices = np.where(~var_1.mask)
+        var_1 = var_1[indices]
+        var_2 = var_2[indices]
+        result = np.column_stack((depth[indices[1]], latitude[indices[2]], longitude[indices[3]], time[indices[0]], var_1, var_2))
+    elif len(all_vars) == 5:
+        var = dataset.variables[all_vars[4]][:]
+        indices = np.where(~var.mask)
+        var = var[indices]
+        result = np.column_stack((depth[indices[1]], latitude[indices[2]], longitude[indices[3]], time[indices[0]], var))
 
-                depth = dataset.variables['depth'][:]
-                latitude = dataset.variables['latitude'][:]
-                longitude = dataset.variables['longitude'][:]
-                time = dataset.variables['time'][:]
+    result[:, 0] *= -1
+    result[:, 3] = result[:, 3] * 3600 - seconds_1950_to_1970 # Seconds from 1st Jan 1970
 
-                if i == 'cur':
-                    uo = dataset.variables['uo'][:]
-                    vo = dataset.variables['vo'][:]
-                    indices = np.where(~uo.mask)
-                    uo = uo[indices]
-                    vo = vo[indices]
-                    result = np.column_stack((depth[indices[1]], latitude[indices[2]], longitude[indices[3]], time[indices[0]], vo, uo))
-                    # r, theta, phi, t, v_theta, v_phi
+    if any([r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max]):
+        result = data_filter(result, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
+    # print(pd.DataFrame(result), '\n', pd.DataFrame(result).describe())
 
-                else:
-                    wo = dataset.variables['wo'][:]
-                    indices = np.where(~wo.mask)
-                    wo = wo[indices]
-                    result = np.column_stack((depth[indices[1]], latitude[indices[2]], longitude[indices[3]], time[indices[0]], wo))
-                    # r, theta, phi, t, w
+    result = result.data
+    result = np.asarray(result)
 
-                result[:, 0] *= -1
-                result[:, 3] = result[:, 3] * 3600 - seconds_1950_to_1970 # Seconds from 1st Jan 1970
+    np.save(npy_save_path, result)
 
-                result = data_filter_and_standardization(result, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max)
-                # print(pd.DataFrame(result), '\n', pd.DataFrame(result).describe())
 
-                result = result.data
-                result = np.asarray(result)
-                np.save(save_path_t, result)
+def nc_folder_convert_and_filter(folder_path, r_min=None, r_max=None, theta_min=None, theta_max=None, phi_min=None, phi_max=None, t_min=None, t_max=None):
+    nc_paths = []
+    npy_save_paths = []
+    for file in os.listdir(folder_path):
+        if file.endswith(".nc"):
+            nc_paths.append(os.path.join(folder_path, file))
+            npy_save_paths.append(os.path.join(folder_path, file[:-3] + '.npy'))
+
+    for i in tqdm(range(len(nc_paths))):
+        nc_convert_and_filter(nc_path=nc_paths[i], 
+                            npy_save_path=npy_save_paths[i], 
+                            r_min=r_min, r_max=r_max, 
+                            theta_min=theta_min, theta_max=theta_max, 
+                            phi_min=phi_min, phi_max=phi_max, 
+                            t_min=t_min, t_max=t_max)
 
  
 def argo_split(data_path, save_path, trian_vali_test=[8, 1, 1]):
@@ -135,9 +139,9 @@ def argo_split(data_path, save_path, trian_vali_test=[8, 1, 1]):
     part2 = df[sample[round(df.shape[0] / sum(trian_vali_test) * trian_vali_test[0]):round(df.shape[0] / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1]))]]
     part3 = df[sample[round(df.shape[0] / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1])):]]
 
-    np.save(os.path.join(save_path, f"argo_train.npy"), part1)
-    np.save(os.path.join(save_path, f"argo_vali.npy"), part2)
-    np.save(os.path.join(save_path, f"argo_test.npy"), part3)
+    np.save(os.path.join(save_path, "argo_train.npy"), part1)
+    np.save(os.path.join(save_path, "argo_vali.npy"), part2)
+    np.save(os.path.join(save_path, "argo_test.npy"), part3)
 
 
 def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ratio=1):
@@ -212,12 +216,15 @@ def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_
     # ---------------------- Currents data -----------------------
 
     # Convert NC files, filter the data and standardize them
-    currents_convert_and_filter(data_path=currents_data_path, 
-                                save_path=currents_data_path, 
-                                r_min=r_min, r_max=r_max, 
-                                theta_min=theta_min, theta_max=theta_max, 
-                                phi_min=phi_min, phi_max=phi_max, 
-                                t_min=t_min, t_max=t_max)
+    print('Coverting the Copernicus NC files and filtering the currents data.')
+
+    for folder in ['cur', 'wcur']:
+        folder_path = os.path.join(currents_data_path, folder)
+        nc_folder_convert_and_filter(folder_path, r_min=r_min, r_max=r_max, 
+                                    theta_min=theta_min, theta_max=theta_max, 
+                                    phi_min=phi_min, phi_max=phi_max, 
+                                    t_min=t_min, t_max=t_max)
+        
 
     # Merge data fron different files and split them into training, validation and test sets.
     currents_merge_and_split(data_path=currents_data_path,
