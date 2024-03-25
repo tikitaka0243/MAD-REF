@@ -11,7 +11,7 @@
 </div>
 
 
-# Local and global dynamic marine variable fields inversion with primitive equations neural networks (PENN)
+# Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly
 
 
 
@@ -21,7 +21,7 @@
 
 # Abstract
 
-Marine variable fields inversion contributes to the study of marine systems and guides human activities in the marine domain. Previous artificial intelligence (AI)- and statistics-based methods have limitations in utilizing ocean data, producing inversion outputs, and incorporating physical constraints. Therefore, we propose the Primitive Equations Neural Networks (PENN), a mesh-free and easy-to-implement model for the inversion of ocean temperature-salinity and dynamic fields. This approach enhances interpretability and enables the inversion of variable fields for unobserved data. We validate PENN in both local (equatorial Pacific) and global scenarios, comparing the inversion outcomes with competing reanalysis data and other inversion methods. Throughout the evaluations, PENN consistently demonstrates superior performance, where the overall errors for temperature, salinity, vertical velocity, northward velocity, and eastward velocity fields are 0.455 °C, 0.0714 psu, 4.254×10<sup>-6</sup>m/s<sup>2</sup>, 0.0777 m/s<sup>2</sup>, and 0.0825 m/s<sup>2</sup> respectively for the global ocean. Therefore, by providing continuous global inversion marine fields across different time and locations, PENN can accurately identify phenomena such as the Mediterranean Salinity Crisis and the North Atlantic Warm Current. Furthermore, by precisely learning ocean change patterns, PENN can effectively predict future ocean changes and challenging-to-observe marine areas, including the Arctic zone.
+Spatiotemporal projections in marine are crucial for science and society, significantly enhancing the understanding of marine systems, protecting the marine environment, and guiding human activities in the ocean. Previous artificial intelligence (AI) and statistics-based inversion methods, along with numerical forecasting approaches face limitations in leveraging ocean data, generating continuous inversion outputs, and incorporating informative physical constraints. In response to these challenges, we propose the {\color{red}Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net), a mesh-free and easily implementable model designed for the spatial inversion and temporal prediction of ocean temperature-salinity and dynamic fields from Argo and reanalysis data}. This innovative approach enhances interpretability and enables the inversion of variable fields not directly from observed data, i.e., the ocean pressure and density that can reflect fluctuations in ocean transport. MDRF-Net undergoes rigorous spatiotemporal validation and comparison against reanalysis data, demonstrating superior accuracy against other inversion methods. The overall errors for global ocean temperature, salinity, vertical velocity, northward velocity, and eastward velocity fields are 0.455 °C, 0.0714 psu, 4.254×10<sup>-6</sup>m/s, 0.0777 m/s, and 0.0825 m/s, respectively. With its ability to provide contiguous global four-dimensional marine fields, MDRF-Net proves effective in accurately identifying phenomena such as the Mediterranean Salinity Crisis and the North Atlantic Warm Current. More crucially, MDRF-Net could explore challenging-to-observe marine areas like the Arctic zone and forecast oceanic variations for different future timeframe. Thus, MDRF-Net is helping create remarkable effects on Earth's climate and human use of the ocean.
 
 ## Keywords
 
@@ -42,7 +42,7 @@ load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path
 
 # Primitive equations neural networks (PENN)
 
-![](/Plot/PENNStructure.jpg)
+![](/Plot/MDRF-NetStructure.pdf)
 
 Above is the structure of PENN, run the following function to train the model.
 
