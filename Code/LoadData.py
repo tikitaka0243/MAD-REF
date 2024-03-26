@@ -128,23 +128,23 @@ def nc_folder_convert_and_filter(folder_path, r_min=None, r_max=None, theta_min=
                             t_min=t_min, t_max=t_max)
 
  
-def argo_split(data_path, save_path, trian_vali_test=[8, 1, 1]):
+def argo_split(data_path, save_path, train_vali_test=[8, 1, 1]):
 
     print('Spliting the Argo data.')
 
     df = np.load(data_path)
 
     sample = np.random.choice(df.shape[0], size=df.shape[0], replace=False)
-    part1 = df[sample[:round(df.shape[0] / sum(trian_vali_test) * trian_vali_test[0])]]
-    part2 = df[sample[round(df.shape[0] / sum(trian_vali_test) * trian_vali_test[0]):round(df.shape[0] / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1]))]]
-    part3 = df[sample[round(df.shape[0] / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1])):]]
+    part1 = df[sample[:round(df.shape[0] / sum(train_vali_test) * train_vali_test[0])]]
+    part2 = df[sample[round(df.shape[0] / sum(train_vali_test) * train_vali_test[0]):round(df.shape[0] / sum(train_vali_test) * (train_vali_test[0] + train_vali_test[1]))]]
+    part3 = df[sample[round(df.shape[0] / sum(train_vali_test) * (train_vali_test[0] + train_vali_test[1])):]]
 
     np.save(os.path.join(save_path, "argo_train.npy"), part1)
     np.save(os.path.join(save_path, "argo_vali.npy"), part2)
     np.save(os.path.join(save_path, "argo_test.npy"), part3)
 
 
-def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ratio=1):
+def currents_merge_and_split(data_path, save_path, train_vali_test=[8, 1, 1], ratio=1):
 
     print('Merging and spliting the currents data.')
 
@@ -165,8 +165,8 @@ def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ra
                 
                 # Split into three parts
                 n = round(df.shape[0] * ratio)
-                b_1 = round(n / sum(trian_vali_test) * trian_vali_test[0])
-                b_2 = round(n / sum(trian_vali_test) * (trian_vali_test[0] + trian_vali_test[1]))
+                b_1 = round(n / sum(train_vali_test) * train_vali_test[0])
+                b_2 = round(n / sum(train_vali_test) * (train_vali_test[0] + train_vali_test[1]))
 
                 sample = np.random.choice(df.shape[0], size=df.shape[0], replace=False)
                 part1 = df[sample[:b_1]]
@@ -189,7 +189,7 @@ def currents_merge_and_split(data_path, save_path, trian_vali_test=[8, 1, 1], ra
         np.save(os.path.join(save_path, f"{i}_test.npy"), merged_part3)
 
 
-def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, trian_vali_test=[8, 1, 1], ratio=1):
+def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, train_vali_test=[8, 1, 1], ratio=1):
 
     print('#' * 15, 'Data loading', '#' * 15)
 
@@ -210,7 +210,7 @@ def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_
     # Split data into training, validation and test sets.
     argo_split(data_path=f'{argo_save_path}/argo_data_filtered.npy', 
             save_path=argo_save_path, 
-            trian_vali_test=trian_vali_test)
+            train_vali_test=train_vali_test)
 
 
     # ---------------------- Currents data -----------------------
@@ -229,6 +229,6 @@ def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_
     # Merge data fron different files and split them into training, validation and test sets.
     currents_merge_and_split(data_path=currents_data_path,
                             save_path=currents_save_path, 
-                            trian_vali_test=trian_vali_test, 
+                            train_vali_test=train_vali_test, 
                             ratio=ratio) 
         

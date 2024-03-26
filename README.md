@@ -15,7 +15,7 @@
 
 
 
-![](/Plot/ResultEquator.jpg)
+![](/Image/Results.jpg)
 
 
 
@@ -38,22 +38,54 @@ We found that a convenient way to download Argo data is to use Argo's data visua
 After downloading the data, run the following function in the `Code/LoadData.py` file to process them.
 
 ```python
-load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, trian_vali_test=[8, 1, 1], ratio=1)
+load_data(argo_data_path, argo_save_path, currents_data_path, ...)
 ```
 
-# Primitive equations neural networks (PENN)
+Parameters explained:
+* `argo_data_path` and `argo_data_path`: Path of the raw Argo data and path to save the processed Argo data.
+* `currents_data_path` and `currents_data_path`: Path of the raw currents data and path to save the processed currents data.
+* `r_min` and `r_max`: The minimum and maximum values of the water depth of the ocean variable fields in meters, e.g., -2000 and 0.
+* `theta_min` and `theta_max`: The minimum and maximum values of the latitude of the ocean variable field in degrees, e.g. -20 and 60.
+* `phi_min` and `phi_max`: The minimum and maximum values of the longitude of the ocean variable field in degrees, e.g. -120 and 170.
+* `t_min` and `t_max`: Minimum and maximum values of the ocean variable field time in the following format 'YYYY-MM-DDTHH:MM:SSZ', e.g. '2021-05-18T05:42:37Z'.
+* `train_vali_test`: The ratio of the training set, validation set, and test set, e.g. [8, 1, 1].
 
-![](/Plot/MDRF-NetStructure.pdf)
+# Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net)
 
-Above is the structure of PENN, run the following function to train the model.
+![MDRF-Net](/Image/MDRF-NetStructure.jpg)
+
+Above is the structure of MDRF-Net, run the following function to train the model.
 
 ```python
-penn(data_path, r_min, r_max, ...)
+mdrf_net(data_path, r_min, r_max, ...)
 ```
+
+Parameters explained:
+* `data_path`: Path to data storage.
+* `r_min` and `r_max`: The minimum and maximum values of the water depth of the ocean variable fields in meters, e.g., -2000 and 0.
+* `theta_min` and `theta_max`: The minimum and maximum values of the latitude of the ocean variable field in degrees, e.g. -20 and 60.
+* `phi_min` and `phi_max`: The minimum and maximum values of the longitude of the ocean variable field in degrees, e.g. -120 and 170.
+* `t_min` and `t_max`: Minimum and maximum values of the ocean variable field time in the following format 'YYYY-MM-DDTHH:MM:SSZ', e.g. '2021-05-18T05:42:37Z'.
+* `r_num`, `theta_num` and `phi_num`: The density of sampling points used for calculating equation errors across water depth, latitude, and longitude.
+* `batch_size`: The batch size for each variable's observed data points.
+* `init_beta_tau` and `init_beta_sigma`: The initial values of the parameters $\beta_\tau$ and $\beta_\sigma$ in the primitive equations.
+* `num_domain` and `num_boundary`: The number of sampling points on the domain and along the boundary used for computing the equation error.
+* `input_output_size` The number of inputs and outputs of the network.
+* `n_layers`: Each parallel subnet's number of layers.
+* `activation`: Activation function.
+* `initializer`: Parameters initialize method.
+* `model_save_path_1` and `model_save_path_2`: The storage paths for models in the two training phases.
+* `variable_save_path`: The storage path for the model's unknown parameters.
+* `save_period`: The storage interval for the model and its parameters, measured in iterations.
+* `resample_period_1` and `resample_period_2`: The resampling interval for observational data and sampling points, measured in iterations.
+* `num_iter_1` and `num_iter_2`: The total number of iterations for each stage in the two-stage training separately.
+* `optimizer`: Optimization algorithm.
+* `learning_rate_1` and `learning_rate_2`: The initial learning rates for the two training stages.
+* `loss_weights_1` and `loss_weights_2`: The internal weights of the loss function for the two training stages.
 
 
 # R Shiny platform
 
-We have integrated all the variable prediction performances across different time and space into an interactive R Shiny platform (https://tikitakatikitaka.shinyapps.io/penn-shiny/). This platform facilitates users to access information about marine variables of interest across different time and spatial dimensions.
+We have integrated all the variable prediction performances across different time and space into an interactive R Shiny platform (https://tikitakatikitaka.shinyapps.io/mdrf-net-shiny/). This platform facilitates users to access information about marine variables of interest across different time and spatial dimensions.
 
-<img src="Plot/Shiny.png" alt="图像" width="400"/>
+<img src="Image/Shiny.png" alt="Shiny Image" width="400"/>
