@@ -26,7 +26,7 @@ Spatiotemporal projections in marine are crucial for science and society, signif
 
 ## Keywords
 
-Fields inversion and forecasting | Global ocean dynamics | Primitive equations | Uncollected marine variables
+Fields inversion | Global ocean dynamics | Primitive equations | Uncollected marine variables
 
 
 # Data source and processing
