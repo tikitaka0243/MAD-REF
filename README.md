@@ -57,13 +57,13 @@ where this system admits a specific Taylor-Green vortex solution corresponding t
 
 The Taylor-Green vortex solution is as follows:
 $$
-\begin{aligned}
+\begin{align*}
 v &= -\sin(2\pi x)\cos(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right],\\
 w &= \cos(2\pi x)\sin(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right], \\
 p &= \frac{1}{4}\cos(4\pi x)\exp\left[-8\pi^2(\eta+\zeta)t\right] + \frac{1}{2\pi}\cos(2\pi z)\exp(-4\pi^2\zeta_{\tau}t),\\
 \tau &= \sin(2\pi z)\exp(-4\pi^2\zeta_{\tau}t), \\
 Q &= \pi\cos(2\pi x)\sin(4\pi z)\exp\left[-4\pi^2(\eta+\zeta+\zeta_{\tau})t\right].
-\end{aligned}
+\end{align*}
 $$
 
 The results are presented below, with further details available in our paper.
