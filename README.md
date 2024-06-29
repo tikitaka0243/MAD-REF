@@ -46,25 +46,16 @@ Fields inversion | Global ocean dynamics | Primitive equations | Uncollected mar
 We first explore the capabilities of MDRF-Net in a simulated system by considering a 2D simplified version of the primitive equations which has only one dimension in the horizontal direction ($x$) and does not include the diffusion equation for salinity as well as the equation of state. The simplified equations involve four variables: temperature ($\tau$), horizontal velocity ($v$), vertical velocity ($w$), and pressure ($p$). The domain is based on a Cartesian coordinate system and is dimensionless.
 
 The simplified 2D primitive equations are given by:
-$$\begin{aligned}
-\frac{\partial v}{\partial t} + v \frac{\partial v}{\partial x} + w \frac{\partial v}{\partial z} - \eta \frac{\partial^2 v}{\partial x^2} - \zeta \frac{\partial^2 v}{\partial z^2} + \frac{\partial p}{\partial x} &= 0, \\
-\frac{\partial p}{\partial z} &= -\tau, \\
-\frac{\partial v}{\partial x} + \frac{\partial w}{\partial z} &= 0, \\
-\frac{\partial \tau}{\partial t} + v \frac{\partial \tau}{\partial x} + w \frac{\partial \tau}{\partial z} - \eta_{\tau} \frac{\partial^2 \tau}{\partial x^2} - \zeta_{\tau} \frac{\partial^2 \tau}{\partial z^2} &= Q,
-\end{aligned}$$
+<p align="center">
+  <img src="Image/PEs.png" alt="Simulation equations" width="350"/>
+</p>
 
 where this system admits a specific Taylor-Green vortex solution corresponding to a periodic source term $Q$.
 
 The Taylor-Green vortex solution is as follows:
-$$
-\begin{align*}
-v &= -\sin(2\pi x)\cos(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right],\\
-w &= \cos(2\pi x)\sin(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right], \\
-p &= \frac{1}{4}\cos(4\pi x)\exp\left[-8\pi^2(\eta+\zeta)t\right] + \frac{1}{2\pi}\cos(2\pi z)\exp(-4\pi^2\zeta_{\tau}t),\\
-\tau &= \sin(2\pi z)\exp(-4\pi^2\zeta_{\tau}t), \\
-Q &= \pi\cos(2\pi x)\sin(4\pi z)\exp\left[-4\pi^2(\eta+\zeta+\zeta_{\tau})t\right].
-\end{align*}
-$$
+<p align="center">
+  <img src="Image/Sol.png" alt="Simulation solution" width="500"/>
+</p>
 
 The results are presented below, with further details available in our paper.
 
