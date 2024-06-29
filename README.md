@@ -11,9 +11,12 @@
 </div>
 
 
-# Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly
+<p style="text-align:center; font-size: 24px;">
+<strong>Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly</strong>
+</p>
+<p style="text-align:center; margin-top: -10px;">
 Zhixi Xiong, Yukang Jiang, Wenfang Lu, Xueqin Wang, and Ting Tian
-
+</p>
 
 
 ![](/Image/Results.jpg)
