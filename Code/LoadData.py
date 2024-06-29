@@ -189,46 +189,5 @@ def currents_merge_and_split(data_path, save_path, train_vali_test=[8, 1, 1], ra
         np.save(os.path.join(save_path, f"{i}_test.npy"), merged_part3)
 
 
-def load_data(argo_data_path, argo_save_path, currents_data_path, currents_save_path, r_min, r_max, theta_min, theta_max, phi_min, phi_max, t_min, t_max, train_vali_test=[8, 1, 1], ratio=1):
 
-    print('#' * 15, 'Data loading', '#' * 15)
-
-    # ---------------------- Argo data -----------------------
-
-    # Merge data from different Argo floats
-    argo_concat(data_path=argo_data_path, 
-                save_path=f'{argo_save_path}/raw_argo_data.csv')
-
-    # Select relevant variables, filter the data and standardize them
-    argo_filter(data_path=f'{argo_save_path}/raw_argo_data.csv', 
-                save_path=f'{argo_save_path}/argo_data_filtered.npy', 
-                r_min=r_min, r_max=r_max, 
-                theta_min=theta_min, theta_max=theta_max, 
-                phi_min=phi_min, phi_max=phi_max, 
-                t_min=t_min, t_max=t_max)
-
-    # Split data into training, validation and test sets.
-    argo_split(data_path=f'{argo_save_path}/argo_data_filtered.npy', 
-            save_path=argo_save_path, 
-            train_vali_test=train_vali_test)
-
-
-    # ---------------------- Currents data -----------------------
-
-    # Convert NC files, filter the data and standardize them
-    print('Coverting the Copernicus NC files and filtering the currents data.')
-
-    for folder in ['cur', 'wcur']:
-        folder_path = os.path.join(currents_data_path, folder)
-        nc_folder_convert_and_filter(folder_path, r_min=r_min, r_max=r_max, 
-                                    theta_min=theta_min, theta_max=theta_max, 
-                                    phi_min=phi_min, phi_max=phi_max, 
-                                    t_min=t_min, t_max=t_max)
-        
-
-    # Merge data fron different files and split them into training, validation and test sets.
-    currents_merge_and_split(data_path=currents_data_path,
-                            save_path=currents_save_path, 
-                            train_vali_test=train_vali_test, 
-                            ratio=ratio) 
         

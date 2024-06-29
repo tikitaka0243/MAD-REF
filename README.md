@@ -71,17 +71,18 @@ python Simulation.py
 
 We utilized ocean temperature and salinity data from the Argo project (https://argo.ucsd.edu/) and current reanalysis data from the EU Copernicus ocean service (https://www.copernicus.eu/en).
 
-We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the csv format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant nc data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the code 'cur' and 'wcur' in it represent the 3D ocean current reanalysis data.
+We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the CSV format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant NC data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the codes 'cur' and 'wcur' in them represent the 3D ocean current reanalysis data.
 
-After downloading the data, run the following function in the `Code/LoadData.py` file to process them.
+After downloading the data, run the `LoadData.py` file to process them.
 
-```python
-load_data(argo_data_path, argo_save_path, currents_data_path, ...)
+```
+python LoadData.py --argo_data_path Data/Argo/RawFiles --argo_save_path Data/Argo
+--currents_data_path Data/Currents/RawFiles --currents_save_path Data/Currents
 ```
 
-Parameters explained:
-* `argo_data_path` and `argo_data_path`: Path of the raw Argo data and path to save the processed Argo data.
-* `currents_data_path` and `currents_data_path`: Path of the raw currents data and path to save the processed currents data.
+Command-line arguments explained:
+* `argo_data_path` and `argo_save_path`: Path of the raw Argo data and path to save the processed Argo data.
+* `currents_data_path` and `currents_save_path`: Path of the raw currents data and path to save the processed currents data.
 * `r_min` and `r_max`: The minimum and maximum values of the water depth of the ocean variable fields in meters, e.g., -2000 and 0.
 * `theta_min` and `theta_max`: The minimum and maximum values of the latitude of the ocean variable field in degrees, e.g. -20 and 60.
 * `phi_min` and `phi_max`: The minimum and maximum values of the longitude of the ocean variable field in degrees, e.g. -120 and 170.
@@ -90,13 +91,12 @@ Parameters explained:
 
 ## Train MDRF-Net
 
-Above is the structure of MDRF-Net, run the following function to train the model.
-
-```python
-mdrf_net(data_path, r_min, r_max, ...)
+Above is the structure of MDRF-Net, run the `Train.py` file to train the model.
+```
+python Train.py --data_path Data --batch_size 512 --activation tanh --initializer Glorot uniform --model_save_path_1 Code/Model1 --model_save_path_2 Code/Model2 --variable_save_path Data/variable.dat --learning_rate_1 1e-4 --learning_rate_2 1e-5
 ```
 
-Parameters explained:
+Command-line arguments explained:
 * `data_path`: Path to data storage.
 * `r_min` and `r_max`: The minimum and maximum values of the water depth of the ocean variable fields in meters, e.g., -2000 and 0.
 * `theta_min` and `theta_max`: The minimum and maximum values of the latitude of the ocean variable field in degrees, e.g. -20 and 60.
@@ -122,6 +122,6 @@ Parameters explained:
 
 # R Shiny platform
 
-We have integrated all the variable prediction performances across different time and space into an interactive R Shiny platform (https://tikitakatikitaka.shinyapps.io/mdrf-net-shiny/). This platform facilitates users to access information about marine variables of interest across different time and spatial dimensions.
+We have integrated all the variable prediction performances across different times and spaces into an interactive R Shiny platform (https://tikitakatikitaka.shinyapps.io/mdrf-net-shiny/). This platform facilitates users to access information about marine variables of interest across different time and spatial dimensions.
 
 <img src="Image/Shiny.png" alt="Shiny Image" width="400"/>
