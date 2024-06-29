@@ -29,7 +29,43 @@ Spatiotemporal projections in marine are crucial for science and society, signif
 Fields inversion | Global ocean dynamics | Primitive equations | Uncollected marine variables
 
 
-# Data source and processing
+# Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net)
+![MDRF-Net](/Image/MDRF-NetStructure.jpg)
+
+
+# Simulation Study
+
+We first explore the capabilities of MDRF-Net in a simulated system by considering a 2D simplified version of the primitive equations which has only one dimension in the horizontal direction ($x$) and does not include the diffusion equation for salinity as well as the equation of state. The simplified equations involve four variables: temperature ($\tau$), horizontal velocity ($v$), vertical velocity ($w$), and pressure ($p$). The domain is based on a Cartesian coordinate system and is dimensionless.
+
+The simplified 2D primitive equations are given by:
+$$
+\begin{aligned}
+\frac{\partial v}{\partial t} + v \frac{\partial v}{\partial x} + w \frac{\partial v}{\partial z} - \eta \frac{\partial^2 v}{\partial x^2} - \zeta \frac{\partial^2 v}{\partial z^2} + \frac{\partial p}{\partial x} &= 0, \\
+\frac{\partial p}{\partial z} &= -\tau, \\
+\frac{\partial v}{\partial x} + \frac{\partial w}{\partial z} &= 0, \\
+\frac{\partial \tau}{\partial t} + v \frac{\partial \tau}{\partial x} + w \frac{\partial \tau}{\partial z} - \eta_{\tau} \frac{\partial^2 \tau}{\partial x^2} - \zeta_{\tau} \frac{\partial^2 \tau}{\partial z^2} &= Q,
+\end{aligned}
+$$
+where this system admits a specific Taylor-Green vortex solution corresponding to a periodic source term $Q$.
+
+The Taylor-Green vortex solution is as follows:
+$$
+\begin{aligned}
+v &= -\sin(2\pi x)\cos(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right],\\
+w &= \cos(2\pi x)\sin(2\pi z)\exp\left[-4\pi^2(\eta+\zeta)t\right], \\
+p &= \frac{1}{4}\cos(4\pi x)\exp\left[-8\pi^2(\eta+\zeta)t\right] + \frac{1}{2\pi}\cos(2\pi z)\exp(-4\pi^2\zeta_{\tau}t),\\
+\tau &= \sin(2\pi z)\exp(-4\pi^2\zeta_{\tau}t), \\
+Q &= \pi\cos(2\pi x)\sin(4\pi z)\exp\left[-4\pi^2(\eta+\zeta+\zeta_{\tau})t\right].
+\end{aligned}
+$$
+
+The results are presented below, with further details available in our paper.
+
+![Simulation study](/Image/simulation_comparison.jpg)
+
+# Work with Real Data
+
+## Data source and processing
 
 We utilized ocean temperature and salinity data from the Argo project (https://argo.ucsd.edu/) and current reanalysis data from the EU Copernicus ocean service (https://www.copernicus.eu/en).
 
@@ -50,9 +86,7 @@ Parameters explained:
 * `t_min` and `t_max`: Minimum and maximum values of the ocean variable field time in the following format 'YYYY-MM-DDTHH:MM:SSZ', e.g. '2021-05-18T05:42:37Z'.
 * `train_vali_test`: The ratio of the training set, validation set, and test set, e.g. [8, 1, 1].
 
-# Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net)
-
-![MDRF-Net](/Image/MDRF-NetStructure.jpg)
+## Train MDRF-Net
 
 Above is the structure of MDRF-Net, run the following function to train the model.
 
