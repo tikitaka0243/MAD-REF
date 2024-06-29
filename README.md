@@ -12,6 +12,7 @@
 
 
 # Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly
+Zhixi Xiong, Yukang Jiang, Wenfang Lu, Xueqin Wang, and Ting Tian
 
 
 
@@ -21,7 +22,16 @@
 
 # Abstract
 
-Spatiotemporal projections in marine are crucial for science and society, significantly enhancing the understanding of marine systems, protecting the marine environment, and guiding human activities in the ocean. Previous artificial intelligence (AI) and statistics-based inversion methods face limitations in leveraging ocean data, generating continuous inversion outputs, and incorporating informative physical constraints. In response to these challenges, we propose the Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net), which seamlessly integrates marine physical mechanisms from the primitive equations and multi-source observed data to reconstruct and forecast continuous global ocean temperature-salinity and dynamic fields. This mesh-free and easily implementable model enhances interpretability and enables the inversion of variable fields not directly from observed data, as well as exploring challenging-to-observe marine areas like the Arctic zone and forecasting oceanic variations for different future timeframe. Methodologically, MDRF-Net employs the ensemble method with multiple rotations of the Earth's coordinate system, a parallel neural network sharing the first layer, and a two-step training strategy to improve its performance in polar regions, accuracy, and training efficiency. MDRF-Net has undergone thorough spatiotemporal validation and outperforms other inversion methods in accuracy when compared to reanalysis data. It achieves notably low overall errors: 0.455 °C, 0.0714 psu, 4.254×10<sup>-6</sup>m/s, 0.0777 m/s, and 0.0825 m/s for vertical, northward, and eastward velocities, respectively. Overall, MDRF-Net is proficient at learning the ocean dynamics system utilizing physical mechanisms, and is helping create remarkable effects on Earth's climate and human use of the ocean.
+Spatiotemporal projections in marine science are essential for understanding ocean systems and their impact on Earth's climate. 
+However, existing AI-based and statistics-based inversion methods face challenges in leveraging ocean data, generating continuous outputs, and incorporating physical constraints. 
+We propose the Marine Dynamic Reconstruction and Forecast Neural Networks (MDRF-Net), which integrates marine physical mechanisms and observed data to reconstruct and forecast continuous ocean temperature-salinity and dynamic fields.
+MDRF-Net leverages statistical theories and techniques, incorporating parallel neural network sharing initial layer, two-step training strategy, and ensemble methodology, facilitating in exploring challenging marine areas like the Arctic zone. 
+We have also theoretically justified the rationality of it by providing an upper bound on its generalization error.
+The effectiveness of MDRF-Net's is validated through a comprehensive simulation study, which highlights its capability to reliably estimate unknown parameters.
+Comparison with other inversion methods and reanalysis data are also conducted, and the global test RMSE is 0.455°C for temperature and 0.0714psu for salinity.
+Bridging the gap between statistics and AI, MDRF-Net effectively learns the ocean dynamics system using physical mechanisms and statistical insights, contributing to a deeper understanding of marine systems and their impact on the environment and human use of the ocean.
+
+$$\frac{12}{1\sigma}$$
 
 
 ## Keywords
