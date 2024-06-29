@@ -11,12 +11,8 @@
 </div>
 
 
-<p style="text-align:center; font-size: 24px;">
-<strong>Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly</strong>
-</p>
-<p style="text-align:center; margin-top: -10px;">
+# Reconstructing and forecasting marine dynamic variable fields across space and time globally and gaplessly
 Zhixi Xiong, Yukang Jiang, Wenfang Lu, Xueqin Wang, and Ting Tian
-</p>
 
 
 ![](/Image/Results.jpg)
@@ -63,6 +59,11 @@ The Taylor-Green vortex solution is as follows:
 The results are presented below, with further details available in our paper.
 
 ![Simulation study](/Image/simulation_comparison.jpg)
+
+Run the simulation study:
+```
+python Simulation.py
+```
 
 # Work with Real Data
 
