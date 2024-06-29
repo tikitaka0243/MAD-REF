@@ -1,4 +1,5 @@
-import numpy as np
+import os
 
-matrix = np.array([[1, 2, 3], [4, 5, 6]])
-print(matrix.shape)
+path = 'Output/Prediction/Simulation/2Steps/predcition_plot'
+parent_path = os.path.dirname(path)
+print(parent_path)
