@@ -27,18 +27,25 @@ Fields inversion | Global ocean dynamics | Primitive equations | Uncollected mar
 ![MDRF-Net](/Image/MAD-REF_structure.jpg)
 
 
-## Real Data Source
+## Data Sources
 
-We utilized ocean temperature and salinity data from the Argo project (https://argo.ucsd.edu/) and current reanalysis data from the EU Copernicus ocean service (https://www.copernicus.eu/en).
+We utilized two primary data sources:
 
-We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the CSV format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant NC data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the codes 'cur' and 'wcur' in them represent the 3D ocean current reanalysis data.
+1. **Argo Project** (Ocean temperature and salinity data)
+   - Website: https://argo.ucsd.edu/
+   - Recommended download method: EuroArgo Selection Tool (https://dataselection.euro-argo.eu/) in CSV format
+
+2. **EU Copernicus Ocean Service** (Current reanalysis data)
+   - Website: https://www.copernicus.eu/en
+   - Dataset: 'GLOBAL_ANALYSISFORECAST_PHY_001_024'
+   - Codes: 'cur' and 'wcur' represent 3D ocean current reanalysis data
 
 ## Installation
 ```
 conda env create -f environment.yml
 ```
 
-## Train the Model
+## Training
 ```
 python Simulation.py
 ```

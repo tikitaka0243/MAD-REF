@@ -77,7 +77,7 @@ mdrf.simulation_train(simulation_data_path='Data/Simulation',
 
 # Train 100 times
 for i in tqdm(range(100)):
-    mdrf.simulation_train(simulation_data_path='Data/Simulation/Train', output_dir=f'Output/Model/Simulation/{TASK_NAME}', iters=ITERS, display=100, lrs=LRS, variable_file_name=f'variable_{i}.dat')
+    mdrf.simulation_train(simulation_data_path='Data/Simulation/Train', output_dir=f'Output/Model/Simulation/{TASK_NAME}', iters=ITERS, display=100, lrs=[0.0001, 0.00001], variable_file_name=f'variable_{i}.dat')
 
 # -------------------- Prediction --------------------
 
