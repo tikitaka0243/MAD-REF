@@ -5,7 +5,6 @@
 Zhixi Xiong, Yukang Jiang, Wenfang Lu, Xueqin Wang, and Ting Tian
 
 
-![](/Image/Results.jpg)
 
 
 
@@ -33,6 +32,11 @@ Fields inversion | Global ocean dynamics | Primitive equations | Uncollected mar
 We utilized ocean temperature and salinity data from the Argo project (https://argo.ucsd.edu/) and current reanalysis data from the EU Copernicus ocean service (https://www.copernicus.eu/en).
 
 We found that a convenient way to download Argo data is to use Argo's data visualization tool, EuroArgo Selection Tool (https://dataselection.euro-argo.eu/), and select the CSV format. For the EU Copernicus marine service, it is better to use FileZilla to connect to their server and download the relevant NC data files (see Copernicus website for details), which is faster. The dataset we use is 'GLOBAL_ANALYSISFORECAST_PHY_001_024', and the codes 'cur' and 'wcur' in them represent the 3D ocean current reanalysis data.
+
+## Installation
+```
+conda env create -f environment.yml
+```
 
 ## Train the Model
 ```
